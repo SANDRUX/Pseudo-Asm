@@ -1,0 +1,16 @@
+     INP          
+     COP R1  ,n1  
+     INP          
+     COP R1  ,n2  
+     COP n1  ,R2  
+     ADD n2       
+     DIV TWO      
+     COP R2  ,avg 
+     COP avg ,R1  
+     OUT          
+     HLT          
+n1  :LOC 0        
+n2  :LOC 0        
+TWO :LOC 2        
+avg :LOC 0        
+     ZZZ          
