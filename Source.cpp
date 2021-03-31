@@ -13,14 +13,12 @@ int main()
 	int PC = 0;
 	int symSize = 2;
 
-	std::string line;
+    std::string line = "long string";
 	std::string syName[990];
 
 	std::vector<std::pair<std::string, int>> symbols(992);
 
 	int symAddress[992];
-	
-	std::getline(infile, line);
 
 	//initialize register values
 	symbols[0].first = "R1";
@@ -29,20 +27,22 @@ int main()
 	symbols[1].first = "R2";
 	symbols[1].second = 0;
 	
-	while (line.substr(5, 3) != "ZZZ") 
-	{
-		if (line.substr(0, 4) != "    ") 
-		{
-			symbols[symSize].first = line.substr(0, 4);
-			symbols[symSize].second = (line.substr(9, 1))[0] - '0';
-			symAddress[symSize] = PC;
-			symSize++;		
-		}
+    std::getline(infile, line);
 
-		std::getline(infile, line);
-		
-		PC++;
-	}
+    while (line.substr(5, 3) != "ZZZ")
+    {
+        if (line.substr(0, 4) != "    ")
+        {
+            symbols[symSize].first = line.substr(0, 4);
+            symbols[symSize].second = (line.substr(9, 1))[0] - '0';
+            symAddress[symSize] = PC;
+            symSize++;
+        }
+
+        std::getline(infile, line);
+
+        PC++;
+    }
 
 	std::cout << "name" << " " << "value" << std::endl;
 	
