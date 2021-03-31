@@ -63,79 +63,46 @@ int main()
 	{
 		if (line.substr(0, 4) == "    ") 
 		{
-			switch (line.substr(5, 3))
+			if (line.substr(5, 3) == "INP")
 			{
-				case "INP":
+				std::cin >> symbols[0].second;
+			}
 
-					std::cin >> symbols[0].second;
-					break;
-				
-				case "OUT":
+			else if (line.substr(5, 3) == "OUT")
+			{
+				std::cout << symbols[0].second;
+			}
 
-					std::cout << symbols[0].second;
-					break;
+			else if (line.substr(5, 3) == "COP")
+			{
+				size_t index[2];				
 
-				case "COP":
+				for (int i = 0; i < symSize; i++)
+				{
+					size_t found = line.substr(9, line.size() - 8).find(symbols[i].first);
 
-					std::string args[2];				
-
-					for (int i = 0; i < symSize; i++)
+					if (found != std::string::npos)
 					{
-						size_t found = std::find(line.substr(9, line.size() - 8));
-
-						if (found != std::string::npos)
+						if (found == 9)
 						{
-							if (found == 9)
-							{
-								args[0] = std::find(line.substr(9, line.size() - 8));
-							}
+							index[0] = line.substr(9, line.size() - 8).find(symbols[i].first);
+						}
 
-							else
-							{
-								args[1] = std::find(line.substr(9, line.size() - 8));
-							}
+						else
+						{
+							index[1] = line.substr(9, line.size() - 8).find(symbols[i].first);
 						}
 					}
+				}
 
-					int index[2];
+				symbols[index[1]].second = symbols[index[0]].second;
+			}
 
-					for (int i = 0; i < symSize; i++)
-					{
-						for (int j = 0; j < 2; j++)
-						{
-							if (symbols[i].first == args[j])
-							{
-								index[j] = i;
-							}
-						}
-					}
-
-					symbols[index[1]].second = symbols[index[0]].second;
-
-					break;
-
-				case "ADD":
-					//TODO
-					break;
-
-				case "SUB":
-					//TODO
-					break;
-
-				case "MUL":
-					//TODO
-					break;
-
-				case "DIV":
-					//TODO
-					break;
-
-				case "HLT":
-					//TODO
-					break;
+			else if (line.substr(5, 3) == "ADD")
+			{
+				//TODO
 			}
 		}
-
 		std::getline(infile, line);
 	}	
 
