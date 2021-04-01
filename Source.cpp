@@ -8,17 +8,16 @@ int main()
 {
 	std::ifstream infile;
 
-	infile.open("tiny.txt");
+    infile.open("tiny.txt");
 
 	int PC = 0;
 	int symSize = 2;
 
-    std::string line = "long string";
-	std::string syName[990];
+    std::string line;
 
 	std::vector<std::pair<std::string, int>> symbols(992);
 
-	int symAddress[992];
+    int symAddress[992];
 
 	//initialize register values
 	symbols[0].first = "R1";
@@ -53,44 +52,46 @@ int main()
 	
 	infile.close();
 	
-	std::fstream execfile;
+    std::ifstream execfile;
 
-	execfile.open("tiny.txt");
+    execfile.open("tiny.txt");
 
-	std::getline(execfile, line);
+    std::string command_line;
 
-	while (line.substr(5, 3) != "ZZZ") 
+    std::getline(execfile, command_line);
+
+    while (command_line.substr(5, 3) != "ZZZ")
 	{
-		if (line.substr(0, 4) == "    ") 
+        if (command_line.substr(0, 4) == "    ")
 		{
-			if (line.substr(5, 3) == "INP")
+            if (command_line.substr(5, 3) == "INP")
 			{
 				std::cin >> symbols[0].second;
 			}
 
-			else if (line.substr(5, 3) == "OUT")
+            else if (command_line.substr(5, 3) == "OUT")
 			{
 				std::cout << symbols[0].second;
 			}
 
-			else if (line.substr(5, 3) == "COP")
+            else if (command_line.substr(5, 3) == "COP")
 			{
 				size_t index[2];				
 
 				for (int i = 0; i < symSize; i++)
 				{
-					size_t found = line.substr(9, line.size() - 8).find(symbols[i].first);
+                    size_t found = command_line.substr(9, command_line.size() - 8).find(symbols[i].first);
 
 					if (found != std::string::npos)
 					{
 						if (found == 9)
 						{
-							index[0] = line.substr(9, line.size() - 8).find(symbols[i].first);
+                            index[0] = command_line.substr(9, command_line.size() - 8).find(symbols[i].first);
 						}
 
 						else
 						{
-							index[1] = line.substr(9, line.size() - 8).find(symbols[i].first);
+                            index[1] = command_line.substr(9, command_line.size() - 8).find(symbols[i].first);
 						}
 					}
 				}
@@ -98,12 +99,58 @@ int main()
 				symbols[index[1]].second = symbols[index[0]].second;
 			}
 
-			else if (line.substr(5, 3) == "ADD")
+            else if (command_line.substr(5, 3) == "ADD")
 			{
-				//TODO
+                for (int i = 0; i < symSize; i++)
+                {
+                    if (symbols[i].first == command_line.substr(9, 3))
+                    {
+                        symbols[1].second += symbols[i].second;
+                    }
+                }
 			}
+
+            else if (command_line.substr(5, 3) == "SUB")
+            {
+                for (int i = 0; i < symSize; i++)
+                {
+                    if (symbols[i].first == command_line.substr(9, 3))
+                    {
+                        symbols[1].second -= symbols[i].second;
+                    }
+                }
+            }
+
+            else if (command_line.substr(5, 3) == "MUL")
+            {
+                for (int i = 0; i < symSize; i++)
+                {
+                    if (symbols[i].first == command_line.substr(9, 3))
+                    {
+                        symbols[1].second *= symbols[i].second;
+                    }
+                }
+            }
+
+            else if (command_line.substr(5, 3) == "DIV")
+            {
+                for (int i = 0; i < symSize; i++)
+                {
+                    if (symbols[i].first == command_line.substr(9, 3))
+                    {
+                        symbols[1].second /= symbols[i].second;
+                    }
+                }
+            }
+
+            else if (command_line.substr(5, 3) == "HLT")
+            {
+                std::cout << "Program finished successfully!";
+                exit(EXIT_SUCCESS);
+            }
 		}
-		std::getline(infile, line);
+
+        getline(execfile, command_line);
 	}	
 
 	return 0;
